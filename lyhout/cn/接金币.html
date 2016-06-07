@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>接金币</title>
+	<meta name="viewport" content="width=device-width,user-scalable=no">
+	<link rel="stylesheet" href="../css/reset.css">
+	<style type="text/css">
+		.wrap, h2 {
+			overflow: hidden;
+			position: relative;
+			width: 300px;
+			height: 300px;
+			margin: 20px auto;
+			color: #fff;
+			background-color: #39f;
+			text-align: center;
+			line-height: 300px;
+			font-size: 88px;
+		}
+		.wrap span {
+			position: absolute;
+			top: -20px;
+			width: 20px;
+			height: 20px;
+			font-size: 14px;
+			text-align: center;
+			line-height: 20px;
+			border-radius: 10px;
+		}
+		.move {
+			position: absolute;
+			bottom: 0;
+			left: 135px;
+			width: 30px;
+			height: 10px;
+			background-color: red;
+		}
+		.click {
+			display: none;
+			position: absolute;
+			top: 50px;
+			left: 50px;
+			width: 200px;
+			height: 200px;
+			background-color: #fff;
+		}
+		.textcon {
+			width: 200px;
+			height: 160px;
+			color: #39f;
+			line-height: 24px;
+			font-size: 18px;
+		}
+		.click .btn {
+			display: block;
+			width: 50px;
+			height: 30px;
+			margin: 0 auto;
+			text-align: center;
+			line-height: 30px;
+			font-size: 18px;
+			background-color: green;
+			cursor: pointer;
+		}
+		.goal {
+			position: absolute;
+			right: 80px;
+			top: 270px;
+			width: 80px;
+			height: 30px;
+			text-align: center;
+			line-height: 30px;
+			font-size: 18px;
+		}
+		.goal h3 {
+			float: right;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<h2>60</h2>
+		<div id="span">
+			<span>金</span>
+			<span>钱</span>
+			<span>宝</span>
+			<span>炸</span>
+		</div>
+		<div class="move"></div>
+		<div class="click">
+			<div class="textcon"></div>
+			<a href="" class="btn">确定</a>
+		</div>
+		<div class="goal">得分:<h3>0</h3></div>
+	</div>
+	<script src="../js/jquery-1.12.3.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		// 生成n多个span
+		var spans = document.getElementById('span');
+		for(var i = 0; i < 3; i++) {
+			spans.innerHTML += spans.innerHTML;
+		}
+		console.log($('.span span'))
+		var len = $('#span span').length;
+		for(var i = 0; i < len / 4; i++) {	
+			$('.wrap span').eq(i * 4).css({
+				'background-color' : 'gold'
+			})
+			$('.wrap span').eq(i * 4 + 1).css({
+				'background-color' : 'green'
+			})
+			$('.wrap span').eq(i * 4 + 2).css({
+				'background-color' : 'pink'
+			})
+			$('.wrap span').eq(i * 4 + 3).css({
+				'background-color' : 'black'
+			})
+		}
+		// 随机生成span的位置，不重复生成
+		var ranArr = [];
+		for(var i = 0; i < $('.wrap span').length; i++) {
+			ranArr[i] = Math.floor(Math.random() * ($('.wrap').width() - $('.wrap span').eq(0).width()));
+			if(i > 0) {
+				for(var m = i - 1; m >= 0; m--) {
+					if(ranArr[i] == ranArr[m]) {
+						i--;
+						break;
+					}
+				}
+			}
+		}
+		for(var i = 0; i < $('.wrap span').length; i++) {
+			$('.wrap span').eq(i).css({
+				'left' : ranArr[i] + 'px'
+			})
+		}
+		// span 从头上掉下来
+		var judgeSpan = 0;
+		function change(){
+			var ranVal = Math.floor(Math.random() * len) - 1;
+			if(judgeSpan == ranVal) {
+				change();
+			}
+			judgeSpan = ranVal;
+			$('.wrap span').eq(ranVal).css({
+				'top' : -20
+			})
+			$('.wrap span').eq(ranVal).animate({
+				'top' : 300
+			}, Math.floor(Math.random() * 1000) + 2000);
+			keyE();
+		}
+		var timer = setInterval(change, Math.floor(Math.random() * 1000) + 500);
+		var time = 60;
+		function timeNow() {
+			time--;
+			$('.wrap h2').html(time);
+			if(time == 0) {
+				clearInterval(timer);
+				clearInterval(timeraway);
+				$('.textcon').html('时间到了，游戏结束');
+				$('.click').css({
+					'display' : 'block'
+				})
+			}
+		}
+		var timeraway = setInterval(timeNow, 1000);
+		// 键盘事件
+		var judgeLeft = 135;
+		$(document).keydown(function(event) {
+			if(event.keyCode == 37) {
+				if(judgeLeft > 0) {
+					judgeLeft -= 5;
+					$('.move').css({
+						'left' : judgeLeft
+					})
+					keyE();
+				}	
+			} else if(event.keyCode == 39) {
+				if(judgeLeft < 270) {
+					judgeLeft += 5;
+					$('.move').css({
+						'left' : judgeLeft
+					})
+					keyE();
+				}
+			}
+		})
+		// 触碰事件
+		function keyE() {
+			var goalVal = 0;
+			for(var i = 0; i < len / 4; i++) {
+				console.log($('.wrap span').eq(i * 4).css('top'));	
+				if(($('.wrap span').eq(i * 4).css('top') > 270 || $('.wrap span').eq(i * 4).css('top') < 320)&& ($('.wrap span').eq(i * 4).css('left') > $('.move').css('left') - 19 || $('.wrap span').eq(i * 4).css('left') < $('.move').css('left') + 49)) {
+					console.log(1);
+					goalVal += 1;
+					$('.goal h3').html(goalVal);
+				}else if(($('.wrap span').eq(i * 4 + 1).css('top') > 270 || $('.wrap span').eq(i * 4 + 1).css('top') < 320)&& ($('.wrap span').eq(i * 4 + 1).css('left') > $('.move').css('left') - 19 || $('.wrap span').eq(i * 4 + 1).css('left') < $('.move').css('left') + 49)) {
+					console.log(1);
+					goalVal += 3;
+					$('.goal h3').html(goalVal);
+				}else if(($('.wrap span').eq(i * 4 + 2).css('top') > 270 || $('.wrap span').eq(i * 4 + 2).css('top') < 320)&& ($('.wrap span').eq(i * 4 + 2).css('left') > $('.move').css('left') - 19 || $('.wrap span').eq(i * 4 + 2).css('left') < $('.move').css('left') + 49)) {
+					console.log(1);
+					goalVal += 5;
+					$('.goal h3').html(goalVal);
+				}else if(($('.wrap span').eq(i * 4 + 3).css('top') > 270 || $('.wrap span').eq(i * 4 + 3).css('top') < 320) && ($('.wrap span').eq(i * 4 + 3).css('left') > $('.move').css('left') - 19 || $('.wrap span').eq(i * 4 + 3).css('left') < $('.move').css('left') + 49)) {
+					console.log(1);
+					clearInterval(timer);
+					clearInterval(timeraway);
+					$('.textcon').html('炸弹爆炸，游戏结束');
+					$('.click').css({
+						'display' : 'block'
+					})
+				}
+			}
+		}
+		keyE();
+	</script>
+</body>
+</html>

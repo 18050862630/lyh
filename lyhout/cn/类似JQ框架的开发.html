@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<meta name="viewport" content="width=device-width,user-scalable=no">
+	<link rel="stylesheet" href="../css/reset.css">
+	<style type="text/css">
+
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<div class="con">烦心事</div>
+	</div>
+	<script type="text/javascript">
+		// 类似jQuery框架开发
+	(function(){
+		function jquery(str) {
+			this.strV = str;
+			this.lenStr = this.strV.length;
+			this.resultArr = [];
+			this.reg = /\w/gi;
+			this.reg1 = /^\*$/g;
+			this.reg2 = /<(.+?)>/g;
+			this.strStr = this.strV.substring(1, this.lenStr);
+			// 广义的暂时不搞
+			// var kongStr = [];
+			// for(var i = 0; i < lenStr; i++) {
+			// 	if(strV.charAt(i) == ' ') {
+			// 		kongStr.push(i); // 放空字符串的索引值
+			// 	}
+			// 	for(var j = 0; j < kongStr.) // 对索引值的判断拿截取的字符串
+			// 	var strStr1 = strV.substring(1, kongStr[0])
+				// 类名获取
+			if(this.strV.charAt(0) == '.') {
+				if(document.getElementsByClassName) {
+					this.resultArr = document.getElementsByClassName('strStr');
+				} else {
+					this.eles = document.getElementsByTagName("*");
+		            for(var i = 0;i < eles.length; i++) {
+		                if (this.eles[i] == this.strStr) {
+		                    this.resultArr.push(this.eles[i]);
+		                }
+		            };
+			        return this.resultArr;
+				} 
+			} else if(this.strV.charAt(0) == '#' &&  !this.strV.charAt(i) == ' ') {
+				// 获取id
+				this.resultArr = document.getElementById('strStr');
+				return this.resultArr;
+			} else if(this.reg.test(this.strV.charAt(0))) {
+				// 获取标签
+				this.resultArr = document.getElementsByTagName('strStr');
+				return this.resultArr;
+			} else if(this.reg1.test(this.strV)) {
+				// 获取全部标签
+				this.resultArr = document.getElementsByTagName('*');
+				return this.resultArr;
+			} else if(this.reg2.test(this.strV)) {
+				// 创建标签与内容
+				this.result = this.strV.replace(reg, function($1, $2) {
+					return '&lt' + $2 + '&gt';
+				})
+				document.appendChild(this.result);
+			}
+		}
+		function $(str) {
+			return new jquery(str)
+		}
+		window.$ = $;
+	})()
+	console.log($('.con'));
+	</script>
+</body>
+</html>

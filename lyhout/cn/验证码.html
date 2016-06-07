@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>验证码</title>
+	<meta name="viewport" content="width=device-width,user-scalable=no">
+	<link rel="stylesheet" href="../css/reset.css">
+	<style type="text/css">
+		.wrap {
+			width: 406px;
+			height: 200px;
+			padding: 50px 0;
+			margin: 0 auto;
+			color: #000;
+		}
+		.con {
+			height: 100px;
+			border: 1px solid #000;
+		}
+		.con span, input, .btn {
+			text-align: center;
+			line-height: 100px;
+			z-index: 1;
+		}
+		.con label {
+			float: left;
+			width: 99px;
+			height: 98px;
+			border: 1px solid #000;
+			font-size: 66px;
+		}
+		input {
+			float: left;
+			width: 99px;
+			height: 98px;
+			border: 0;
+			outline: none;
+		}
+		.btn {
+			margin: 10px auto 0;
+			width: 200px;
+			height: 60px;
+			font-size: 28px;
+			line-height: 60px;
+			border: 1px solid #000;
+			cursor: pointer;
+			border-radius: 5px;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<form class="con">
+			<label><input type="text" onkeyup="jump(this)" maxlength="1"></label>
+			<label><input type="text" onkeyup="jump(this)" maxlength="1"></label>
+			<label><input type="text" onkeyup="jump(this)" maxlength="1"></label>
+			<label><input type="text" onkeyup="jump(this)" maxlength="1"></label>
+		</form>
+		<div class="btn">提交验证</div>
+	</div>
+	<script src="../js/jquery-1.12.3.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$('.con label').click(function() {
+			$(this).css({
+				'box-shadow' : '0 0 1px 1px #0dd',
+				'border' : '1px solid #0dd',
+		
+			}).siblings().css({
+				'box-shadow' : '0 0 0px 0px #000',
+				'border' : '1px solid #000',
+		
+			})
+		})
+		function jump(num) {
+			var input = num.form;
+			if(input.elements[input.elements.length - 1] != num && num.value.length == num.getAttribute("maxlength")){
+			    for(var i = 0; i < $('label').length; i++){
+			        if(input.elements[i] == num){
+			            for(var j = i + 1; j < $('label').length; j++) {
+			                if(input.elements[j].type != "hidden"){
+			                    input.elements[j].focus();
+			                    $('label').eq(j).css({
+			                   		'box-shadow' : '0 0 1px 1px #0dd',
+									'border' : '1px solid #0dd',
+							
+								}).siblings().css({
+									'box-shadow' : '0 0 0px 0px #000',
+									'border' : '1px solid #000',
+							
+								})
+			                    return
+			                }
+			            }
+			        }
+			    }
+			}
+		}
+		$('.btn').hover(function(){
+			$(this).css({
+				'background' : '#ddd'
+			})
+		},function(){
+			$(this).css({
+				'background' : '#fff'
+			})
+		})
+		$('.btn').on('click', function() {
+			if(!$('input').eq(0).val() == '') {
+				if(!$('input').eq(1).val() == '') {
+					if(!$('input').eq(2).val() == '') {
+						if(!$('input').eq(3).val() == '') {				
+							for(var i = 0; i < $('label').length; i++) {
+								$('input').eq(i).val('');
+								$('input').eq(i).css({
+									'box-shadow' : '0 0 0px 0px #000',
+									'border' : '1px solid #000',
+							
+								})
+							}
+						} else {
+							$('input').eq(3).css({
+								'box-shadow' : '0 0 1px 1px #f00',
+								'border' : '1px solid #f00',
+						
+							})
+						}
+					} else {
+						$('input').eq(2).css({
+							'box-shadow' : '0 0 1px 1px #f00',
+							'border' : '1px solid #f00',
+					
+						})
+					}
+				} else {
+					$('input').eq(1).css({
+						'box-shadow' : '0 0 1px 1px #f00',
+						'border' : '1px solid #f00',
+				
+					})
+				}
+			} else {
+				$('input').eq(0).css({
+					'box-shadow' : '0 0 1px 1px #f00',
+					'border' : '1px solid #f00',
+			
+				})
+			}			
+		})
+	</script>
+</body>
+</html>
